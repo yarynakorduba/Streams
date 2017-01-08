@@ -20,12 +20,13 @@ public class AsIntStream implements IntStream {
     }
 
     @Override
-    public Double average() { // !!!!!!!!!!!
+    public Double average() {
         return (double)sum()/count();
     }
 
     @Override
-    public Integer max() { // !!!!!!!!!!!
+    public Integer max() {
+        if (this.arr.isEmpty()) throw new IllegalArgumentException("The stream is empty");
         int maxi = 0;
         IntBinaryOperator op = new IntBinaryOperator() {
             @Override
@@ -40,7 +41,8 @@ public class AsIntStream implements IntStream {
     }
 
     @Override
-    public Integer min() { // !!!!!!!!!!!
+    public Integer min() { 
+        if (this.arr.isEmpty()) throw new IllegalArgumentException("The stream is empty");
         int maxi = sum();
         IntBinaryOperator op = new IntBinaryOperator() {
             @Override
@@ -61,6 +63,7 @@ public class AsIntStream implements IntStream {
 
     @Override
     public Integer sum() {
+        if (this.arr.isEmpty()) throw new IllegalArgumentException("The stream is empty");
         int sum = 0;
         IntBinaryOperator nw = new IntBinaryOperator() {
             @Override
@@ -102,7 +105,7 @@ public class AsIntStream implements IntStream {
     }
 
     @Override
-    public IntStream flatMap(IntToIntStreamFunction func) { // !!!!!!!!!!!
+    public IntStream flatMap(IntToIntStreamFunction func) {
         AsIntStream nw = new AsIntStream();
         ArrayList<Integer> temp = new ArrayList<Integer>();
         this.forEach(
@@ -113,17 +116,14 @@ public class AsIntStream implements IntStream {
                         @Override
                         public void accept(int value) {
                             temp.add(value);
-                        }
-                    };
+                        }};
                     ar.forEach(action);
-                }
-        );
+                });
         int[] intArray = new int[temp.size()];
         for (int el=0; el<temp.size(); el++) {
             intArray[el] = temp.get(el);
             System.out.println(intArray[el]);
         }
-
         return new AsIntStream().of(intArray);
     }
 
