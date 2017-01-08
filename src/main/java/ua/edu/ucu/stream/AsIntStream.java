@@ -21,37 +21,36 @@ public class AsIntStream implements IntStream {
     }
 
     @Override
-    public Double average() {
+    public Double average() { // !!!!!!!!!!!
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Integer max() {
+    public Integer max() { // !!!!!!!!!!!
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Integer min() {
+    public Integer min() { // !!!!!!!!!!!
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public long count() {
-        /*
-        int value = 0;
-        IntConsumer action = value1 -> value1++;
-        this.forEach(action);
-        */
-        return (long)1;
+        return this.arr.size();
     }
 
     @Override
     public Integer sum() {
-        /*
-        int value = 0;
-        this.forEach(value1 -> value += value1);
-        */
-        return 0;
+        int sum = 0;
+        IntBinaryOperator nw = new IntBinaryOperator() {
+            @Override
+            public int apply(int left, int right) {
+                left += right;
+                return left;
+            }
+        };
+        return reduce(sum, nw);
     }
 
     @Override
@@ -75,7 +74,7 @@ public class AsIntStream implements IntStream {
     @Override
     public AsIntStream map(IntUnaryOperator mapper) {
         AsIntStream nw = new AsIntStream();
-        this.arr.forEach(
+        this.forEach(
                 x -> {
                     System.out.println(mapper.apply(x));
                     nw.arr.add(mapper.apply(x));
@@ -84,18 +83,27 @@ public class AsIntStream implements IntStream {
     }
 
     @Override
-    public IntStream flatMap(IntToIntStreamFunction func) {
+    public IntStream flatMap(IntToIntStreamFunction func) { // !!!!!!!!!!!
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public int reduce(int identity, IntBinaryOperator op) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int res = identity;
+        for (int el: this.arr) {
+            res = op.apply(res, el);
+
+        }
+        return res;
     }
 
     @Override
-    public int[] toArray() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int[] toArray() { // !!!!!!!!!!!
+        int[] arra = new int[(int)count()];
+        for (int el=0; el<(int)count(); el++) {
+           arra[el] = arr.get(el);
+    }
+    return arra;
     }
 
 }
