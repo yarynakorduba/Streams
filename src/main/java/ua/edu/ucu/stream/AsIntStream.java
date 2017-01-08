@@ -2,14 +2,22 @@ package ua.edu.ucu.stream;
 
 import ua.edu.ucu.function.*;
 
+import java.util.ArrayList;
+
 public class AsIntStream implements IntStream {
 
+    private ArrayList<Integer> arr;
+
     private AsIntStream() {
-        // To Do
+        this.arr = new ArrayList<Integer>();
     }
 
-    public static IntStream of(int... values) {
-        return null;
+    public static AsIntStream of(int... values) {
+        AsIntStream newStream = new AsIntStream();
+        for (int el: values) {
+            newStream.arr.add(el);
+        }
+        return newStream;
     }
 
     @Override
@@ -29,27 +37,50 @@ public class AsIntStream implements IntStream {
 
     @Override
     public long count() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        /*
+        int value = 0;
+        IntConsumer action = value1 -> value1++;
+        this.forEach(action);
+        */
+        return (long)1;
     }
 
     @Override
     public Integer sum() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        /*
+        int value = 0;
+        this.forEach(value1 -> value += value1);
+        */
+        return 0;
     }
 
     @Override
     public IntStream filter(IntPredicate predicate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        AsIntStream res = new AsIntStream();
+        for (int i: arr) {
+            if (predicate.test(i)) {
+                System.out.println(i);
+                res.arr.add(i);
+            }
+        }
+        return res;
     }
 
     @Override
     public void forEach(IntConsumer action) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.arr.forEach(x -> action.accept(x));
+
     }
 
     @Override
-    public IntStream map(IntUnaryOperator mapper) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public AsIntStream map(IntUnaryOperator mapper) {
+        AsIntStream nw = new AsIntStream();
+        this.arr.forEach(
+                x -> {
+                    System.out.println(mapper.apply(x));
+                    nw.arr.add(mapper.apply(x));
+                });
+        return nw;
     }
 
     @Override
