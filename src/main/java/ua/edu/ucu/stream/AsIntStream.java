@@ -1,5 +1,4 @@
 package ua.edu.ucu.stream;
-
 import ua.edu.ucu.function.*;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class AsIntStream implements IntStream {
 
     public static AsIntStream of(int... values) {
         AsIntStream newStream = new AsIntStream();
-        for (int el: values) {
+        for (int el : values) {
             newStream.arr.add(el);
         }
         return newStream;
@@ -22,17 +21,37 @@ public class AsIntStream implements IntStream {
 
     @Override
     public Double average() { // !!!!!!!!!!!
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (double)sum()/count();
     }
 
     @Override
     public Integer max() { // !!!!!!!!!!!
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int maxi = 0;
+        IntBinaryOperator op = new IntBinaryOperator() {
+            @Override
+            public int apply(int left, int right) {
+                if (right > left) {
+                    return right;
+                }
+                return left;
+            }
+        };
+        return reduce(maxi, op);
     }
 
     @Override
     public Integer min() { // !!!!!!!!!!!
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int maxi = sum();
+        IntBinaryOperator op = new IntBinaryOperator() {
+            @Override
+            public int apply(int left, int right) {
+                if (right < left) {
+                    return right;
+                }
+                return left;
+            }
+        };
+        return reduce(maxi, op);
     }
 
     @Override
@@ -56,7 +75,7 @@ public class AsIntStream implements IntStream {
     @Override
     public IntStream filter(IntPredicate predicate) {
         AsIntStream res = new AsIntStream();
-        for (int i: arr) {
+        for (int i : arr) {
             if (predicate.test(i)) {
                 System.out.println(i);
                 res.arr.add(i);
@@ -84,8 +103,30 @@ public class AsIntStream implements IntStream {
 
     @Override
     public IntStream flatMap(IntToIntStreamFunction func) { // !!!!!!!!!!!
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        AsIntStream nw = new AsIntStream();
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        this.forEach(
+                x -> {
+                    System.out.println(func.applyAsIntStream(x));
+                    AsIntStream ar = (AsIntStream)func.applyAsIntStream(x);
+                    IntConsumer action = new IntConsumer() {
+                        @Override
+                        public void accept(int value) {
+                            temp.add(value);
+                        }
+                    };
+                    ar.forEach(action);
+                }
+        );
+        int[] intArray = new int[temp.size()];
+        for (int el=0; el<temp.size(); el++) {
+            intArray[el] = temp.get(el);
+            System.out.println(intArray[el]);
+        }
+
+        return new AsIntStream().of(intArray);
     }
+
 
     @Override
     public int reduce(int identity, IntBinaryOperator op) {
@@ -98,12 +139,12 @@ public class AsIntStream implements IntStream {
     }
 
     @Override
-    public int[] toArray() { // !!!!!!!!!!!
+    public int[] toArray() {
         int[] arra = new int[(int)count()];
         for (int el=0; el<(int)count(); el++) {
-           arra[el] = arr.get(el);
-    }
-    return arra;
+            arra[el] = arr.get(el);
+        }
+        return arra;
     }
 
 }

@@ -19,7 +19,9 @@ public class Main {
                 return operand+5;
             }
         };
-        System.out.println(AsIntStream.of(2, 3, 4, 5, 6, 7, 8).sum());
+
+        int[] rtt = {1, 2, 3, 4, 5};
+        System.out.println(AsIntStream.of(rtt).min());
 
 
        // int[] nw = {-1, 2, 3, 4, 5};
