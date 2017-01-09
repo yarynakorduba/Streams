@@ -1,8 +1,6 @@
 package ua.edu.ucu.stream;
 
-import ua.edu.ucu.function.IntPredicate;
-import ua.edu.ucu.function.IntUnaryOperator;
-
+import ua.edu.ucu.function.*;
 /**
  * Created by cs.ucu.edu.ua on 1/8/2017.
  */
@@ -11,7 +9,7 @@ public class Main {
         IntPredicate nw  = new IntPredicate() {
             @Override
             public boolean test(int value) {
-                return (value>3);
+                return value>3;
             }
         };
 
@@ -23,10 +21,18 @@ public class Main {
         };
 
         int[] rtt = {1, 2, 3, 4, 5};
-        System.out.println(AsIntStream.of(rtt).min());
+        IntToIntStreamFunction itr = new IntToIntStreamFunction() {
+            @Override
+            public IntStream applyAsIntStream(int value) {
+                return AsIntStream.of(value, value*(-1));
+            }
+        };
+        System.out.println(AsIntStream.of(rtt).map(mapp));
+        System.out.println(AsIntStream.of(rtt).flatMap(itr));
+        System.out.println(AsIntStream.of(rtt).filter(nw));
 
 
-       // int[] nw = {-1, 2, 3, 4, 5};
+        // int[] nw = {-1, 2, 3, 4, 5};
         //System.out.println(AsIntStream.of(nw));
     }
 }
