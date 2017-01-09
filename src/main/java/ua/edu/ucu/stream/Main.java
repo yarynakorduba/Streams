@@ -1,6 +1,8 @@
 package ua.edu.ucu.stream;
 
-import ua.edu.ucu.function.*;
+import ua.edu.ucu.function.IntPredicate;
+import ua.edu.ucu.function.IntUnaryOperator;
+
 /**
  * Created by cs.ucu.edu.ua on 1/8/2017.
  */

@@ -1,5 +1,9 @@
 package ua.edu.ucu.stream;
-import ua.edu.ucu.function.*;
+import ua.edu.ucu.function.IntBinaryOperator;
+import ua.edu.ucu.function.IntConsumer;
+import ua.edu.ucu.function.IntPredicate;
+import ua.edu.ucu.function.IntToIntStreamFunction;
+import ua.edu.ucu.function.IntUnaryOperator;
 
 import java.util.ArrayList;
 
@@ -41,7 +45,7 @@ public class AsIntStream implements IntStream {
     }
 
     @Override
-    public Integer min() { 
+    public Integer min() {
         if (this.arr.isEmpty()) throw new IllegalArgumentException("The stream is empty");
         int maxi = sum();
         IntBinaryOperator op = new IntBinaryOperator() {
@@ -106,7 +110,6 @@ public class AsIntStream implements IntStream {
 
     @Override
     public IntStream flatMap(IntToIntStreamFunction func) {
-        AsIntStream nw = new AsIntStream();
         ArrayList<Integer> temp = new ArrayList<Integer>();
         this.forEach(
                 x -> {
@@ -124,7 +127,7 @@ public class AsIntStream implements IntStream {
             intArray[el] = temp.get(el);
             System.out.println(intArray[el]);
         }
-        return new AsIntStream().of(intArray);
+        return AsIntStream.of(intArray);
     }
 
 
